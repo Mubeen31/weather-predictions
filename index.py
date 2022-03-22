@@ -16,6 +16,7 @@ import pathlib
 from components.data_update_time import last_data_update_time
 from components.title_image_value import title_image_and_value
 from components.background_image_container import background_image_and_container
+from components.current_time import current_time_value
 
 # engine = sqlalchemy.create_engine('mysql+pymysql://b54eb1e6af434b:181636f95f46e13@eu-cdbr-west-02.cleardb.net:3306/heroku_323e0ab91ec4d38')
 # df = pd.read_sql_table('accuweather', engine)
@@ -75,6 +76,15 @@ app.layout = html.Div([
 
         html.Div(id='background_image_container',
                  className='background_image'),
+        html.Div([
+            html.Div([
+                html.Div([
+                    html.Div([
+                        html.Div(id='time_value')
+                    ], className='current_weather_time_value'),
+                ], className='current_weather_time_value_forecast_row'),
+            ], className='background_image_current_weather_time_column'),
+        ], className='background_image_current_weather_time_content_row')
     ], className='background_image_current_weather_time_column'),
 ])
 
@@ -101,6 +111,14 @@ def background_image_and_container_callback(n_intervals):
     background_image_and_container_data = background_image_and_container(n_intervals)
 
     return background_image_and_container_data
+
+
+@app.callback(Output('time_value', 'children'),
+              [Input('update_time', 'n_intervals')])
+def current_time_value_callback(n_intervals):
+    current_time_value_data = current_time_value(n_intervals)
+
+    return current_time_value_data
 
 
 if __name__ == "__main__":
