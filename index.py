@@ -17,6 +17,10 @@ from components.data_update_time import last_data_update_time
 from components.title_image_value import title_image_and_value
 from components.background_image_container import background_image_and_container
 from components.current_time import current_time_value
+from components.forecast_text import forecast_text_value
+from components.forecast_image import forecast_image_value
+from components.forecast_value import forecast_value_value
+from components.forecast_time import forecast_time_value
 
 # engine = sqlalchemy.create_engine('mysql+pymysql://b54eb1e6af434b:181636f95f46e13@eu-cdbr-west-02.cleardb.net:3306/heroku_323e0ab91ec4d38')
 # df = pd.read_sql_table('accuweather', engine)
@@ -32,60 +36,76 @@ font_awesome = "https://use.fontawesome.com/releases/v5.10.2/css/all.css"
 meta_tags = [{"name": "viewport", "content": "width=device-width"}]
 external_stylesheets = [meta_tags, font_awesome]
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets = external_stylesheets)
 server = app.server
 app.title = "Weather Sensor Data"
 
 app.layout = html.Div([
     html.Div([
-        dcc.Interval(id='update_value',
-                     interval=6000,
-                     n_intervals=0),
+        dcc.Interval(id = 'update_value',
+                     interval = 6000,
+                     n_intervals = 0),
     ]),
 
     html.Div([
-        dcc.Interval(id='update_time',
-                     interval=1000,
-                     n_intervals=0),
+        dcc.Interval(id = 'update_time',
+                     interval = 1000,
+                     n_intervals = 0),
     ]),
 
     html.Div([
         html.Div([
             html.Div([
-                html.Div(id='last_data_update_time'),
-            ], className='last_data_update_time'),
+                html.Div(id = 'last_data_update_time'),
+            ], className = 'last_data_update_time'),
             html.Div([
                 html.Div([
                     html.Div([
-                        html.I(className="fas fa-home"),
-                    ], className='title_image'),
+                        html.I(className = "fas fa-home"),
+                    ], className = 'title_image'),
                     html.H6('Newtown Road, Worcester, England',
-                            style={'color': 'white'},
-                            className='title'
+                            style = {'color': 'white'},
+                            className = 'title'
                             ),
-                ], className='logo_title'),
-                html.Div(id='title_image_value')
-            ], className='title_image_value_row'),
-            html.A(href='https://www.accuweather.com/en/gb/worcester/wr1-3/current-weather/331595',
-                   target='_blank',
-                   children=[html.P('AccuWeather Data: Worcester, Worcestershire, England', className='link')]),
-        ], className='title_date_time_container')
-    ], className='title_date_time_container_overlay'),
+                ], className = 'logo_title'),
+                html.Div(id = 'title_image_value')
+            ], className = 'title_image_value_row'),
+            html.A(href = 'https://www.accuweather.com/en/gb/worcester/wr1-3/current-weather/331595',
+                   target = '_blank',
+                   children = [html.P('AccuWeather Data: Worcester, Worcestershire, England', className = 'link')]),
+        ], className = 'title_date_time_container')
+    ], className = 'title_date_time_container_overlay'),
 
     html.Div([
 
-        html.Div(id='background_image_container',
-                 className='background_image'),
+        html.Div(id = 'background_image_container',
+                 className = 'background_image'),
         html.Div([
             html.Div([
                 html.Div([
                     html.Div([
-                        html.Div(id='time_value')
-                    ], className='current_weather_time_value'),
-                ], className='current_weather_time_value_forecast_row'),
-            ], className='background_image_current_weather_time_column'),
-        ], className='background_image_current_weather_time_content_row')
-    ], className='background_image_current_weather_time_column'),
+                        html.Div(id = 'time_value')
+                    ], className = 'current_weather_time_value'),
+                    html.Div([
+                        html.Div([
+                            html.Div(id = 'forecast_text')
+                        ], className = 'current_weather_time_value'),
+                        html.Div([
+                            html.Div([
+                                html.Div(id = 'forecast_image')
+                            ], className = 'current_weather_time_value'),
+                            html.Div([
+                                html.Div(id = 'forecast_value')
+                            ], className = 'current_weather_time_value'),
+                        ], className = 'forecast_image_value_row'),
+                        html.Div([
+                            html.Div(id = 'forecast_time')
+                        ], className = 'current_weather_time_value'),
+                    ], className = 'forecast_column')
+                ], className = 'current_weather_time_value_forecast_row'),
+            ], className = 'background_image_current_weather_time_column'),
+        ], className = 'background_image_current_weather_time_content_row')
+    ], className = 'background_image_current_weather_time_column'),
 ])
 
 
@@ -121,5 +141,37 @@ def current_time_value_callback(n_intervals):
     return current_time_value_data
 
 
+@app.callback(Output('forecast_text', 'children'),
+              [Input('update_time', 'n_intervals')])
+def forecast_text_value_callback(n_intervals):
+    forecast_text_value_data = forecast_text_value(n_intervals)
+
+    return forecast_text_value_data
+
+
+@app.callback(Output('forecast_image', 'children'),
+              [Input('update_value', 'n_intervals')])
+def forecast_image_value_callback(n_intervals):
+    forecast_image_value_data = forecast_image_value(n_intervals)
+
+    return forecast_image_value_data
+
+
+@app.callback(Output('forecast_value', 'children'),
+              [Input('update_value', 'n_intervals')])
+def forecast_value_value_callback(n_intervals):
+    forecast_value_value_data = forecast_value_value(n_intervals)
+
+    return forecast_value_value_data
+
+
+@app.callback(Output('forecast_time', 'children'),
+              [Input('update_value', 'n_intervals')])
+def forecast_time_value_callback(n_intervals):
+    forecast_time_value_data = forecast_time_value(n_intervals)
+
+    return forecast_time_value_data
+
+
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug = True)
