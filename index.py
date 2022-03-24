@@ -21,6 +21,11 @@ from components.forecast_text import forecast_text_value
 from components.forecast_image import forecast_image_value
 from components.forecast_value import forecast_value_value
 from components.forecast_time import forecast_time_value
+from components.status_temperature import status_temperature_value
+from components.first_sentence import first_sentence_value
+from components.second_sentence import second_sentence_value
+from components.third_sentence import third_sentence_value
+from components.numeric_value import numeric_value_value
 
 # engine = sqlalchemy.create_engine('mysql+pymysql://b54eb1e6af434b:181636f95f46e13@eu-cdbr-west-02.cleardb.net:3306/heroku_323e0ab91ec4d38')
 # df = pd.read_sql_table('accuweather', engine)
@@ -103,6 +108,26 @@ app.layout = html.Div([
                         ], className = 'current_weather_time_value'),
                     ], className = 'forecast_column')
                 ], className = 'current_weather_time_value_forecast_row'),
+                html.Div([
+                    html.Div(id = 'status_temperature',
+                             className = 'status_temperature_value'),
+                ], className = 'status_temperature_value_row'),
+                html.Div([
+                    html.Div([
+                        html.Div([
+                            html.Div(id = 'first_sentence',
+                                     className = 'status_paragraph_value'),
+                            html.Div(id = 'second_sentence',
+                                     className = 'status_paragraph_value'),
+                        ], className = 'two_rows'),
+                        html.Div(id = 'third_sentence',
+                                 className = 'status_paragraph_value1'),
+                    ], className = 'three_rows')
+                ], className = 'sentence_row'),
+                html.Div([
+                    html.Div(id = 'numeric_value',
+                             className = 'status_numeric_value'),
+                ], className = 'status_numeric_value_row')
             ], className = 'background_image_current_weather_time_column'),
         ], className = 'background_image_current_weather_time_content_row')
     ], className = 'background_image_current_weather_time_column'),
@@ -171,6 +196,46 @@ def forecast_time_value_callback(n_intervals):
     forecast_time_value_data = forecast_time_value(n_intervals)
 
     return forecast_time_value_data
+
+
+@app.callback(Output('status_temperature', 'children'),
+              [Input('update_value', 'n_intervals')])
+def status_temperature_value_callback(n_intervals):
+    status_temperature_value_data = status_temperature_value(n_intervals)
+
+    return status_temperature_value_data
+
+
+@app.callback(Output('first_sentence', 'children'),
+              [Input('update_value', 'n_intervals')])
+def first_sentence_value_callback(n_intervals):
+    first_sentence_value_data = first_sentence_value(n_intervals)
+
+    return first_sentence_value_data
+
+
+@app.callback(Output('second_sentence', 'children'),
+              [Input('update_value', 'n_intervals')])
+def second_sentence_value_callback(n_intervals):
+    second_sentence_value_data = second_sentence_value(n_intervals)
+
+    return second_sentence_value_data
+
+
+@app.callback(Output('third_sentence', 'children'),
+              [Input('update_value', 'n_intervals')])
+def third_sentence_value_callback(n_intervals):
+    third_sentence_value_data = third_sentence_value(n_intervals)
+
+    return third_sentence_value_data
+
+
+@app.callback(Output('numeric_value', 'children'),
+              [Input('update_value', 'n_intervals')])
+def numeric_value_value_callback(n_intervals):
+    numeric_value_value_data = numeric_value_value(n_intervals)
+
+    return numeric_value_value_data
 
 
 if __name__ == "__main__":
