@@ -26,6 +26,19 @@ from components.first_sentence import first_sentence_value
 from components.second_sentence import second_sentence_value
 from components.third_sentence import third_sentence_value
 from components.numeric_value import numeric_value_value
+from components.accu_temp import accu_temp_value
+from components.accu_hum import accu_hum_value
+from components.accu_dew_point import accu_dew_point_value
+from components.accu_atm_pressure import accu_atm_pressure_value
+from components.accu_wind_speed import accu_wind_speed_value
+from components.accu_wind_direction import accu_wind_direction_value
+from components.air_pressure import air_pressure_value
+from components.air_quality import air_quality_value
+from components.sun_rise_status import sun_rise_status_value
+from components.sun_set_status import sun_set_status_value
+from components.wind_speed import wind_speed_graph
+from components.wind_speed_value import wind_speed_value_value
+from components.wind_direction import wind_direction_graph
 
 # engine = sqlalchemy.create_engine('mysql+pymysql://b54eb1e6af434b:181636f95f46e13@eu-cdbr-west-02.cleardb.net:3306/heroku_323e0ab91ec4d38')
 # df = pd.read_sql_table('accuweather', engine)
@@ -80,57 +93,122 @@ app.layout = html.Div([
                    children = [html.P('AccuWeather Data: Worcester, Worcestershire, England', className = 'link')]),
         ], className = 'title_date_time_container')
     ], className = 'title_date_time_container_overlay'),
-
     html.Div([
-
-        html.Div(id = 'background_image_container',
-                 className = 'background_image'),
         html.Div([
+
+            html.Div(id = 'background_image_container',
+                     className = 'background_image'),
             html.Div([
                 html.Div([
                     html.Div([
-                        html.Div(id = 'time_value')
-                    ], className = 'current_weather_time_value'),
-                    html.Div([
                         html.Div([
-                            html.Div(id = 'forecast_text')
+                            html.Div(id = 'time_value')
                         ], className = 'current_weather_time_value'),
                         html.Div([
                             html.Div([
-                                html.Div(id = 'forecast_image')
+                                html.Div(id = 'forecast_text')
                             ], className = 'current_weather_time_value'),
                             html.Div([
-                                html.Div(id = 'forecast_value')
+                                html.Div([
+                                    html.Div(id = 'forecast_image')
+                                ], className = 'current_weather_time_value'),
+                                html.Div([
+                                    html.Div(id = 'forecast_value')
+                                ], className = 'current_weather_time_value'),
+                            ], className = 'forecast_image_value_row'),
+                            html.Div([
+                                html.Div(id = 'forecast_time')
                             ], className = 'current_weather_time_value'),
-                        ], className = 'forecast_image_value_row'),
-                        html.Div([
-                            html.Div(id = 'forecast_time')
-                        ], className = 'current_weather_time_value'),
-                    ], className = 'forecast_column')
-                ], className = 'current_weather_time_value_forecast_row'),
-                html.Div([
-                    html.Div(id = 'status_temperature',
-                             className = 'status_temperature_value'),
-                ], className = 'status_temperature_value_row'),
-                html.Div([
+                        ], className = 'forecast_column')
+                    ], className = 'current_weather_time_value_forecast_row'),
+                    html.Div([
+                        html.Div(id = 'status_temperature',
+                                 className = 'status_temperature_value'),
+                    ], className = 'status_temperature_value_row'),
                     html.Div([
                         html.Div([
-                            html.Div(id = 'first_sentence',
-                                     className = 'status_paragraph_value'),
-                            html.Div(id = 'second_sentence',
-                                     className = 'status_paragraph_value'),
-                        ], className = 'two_rows'),
-                        html.Div(id = 'third_sentence',
-                                 className = 'status_paragraph_value1'),
-                    ], className = 'three_rows')
-                ], className = 'sentence_row'),
+                            html.Div([
+                                html.Div(id = 'first_sentence',
+                                         className = 'status_paragraph_value'),
+                                html.Div(id = 'second_sentence',
+                                         className = 'status_paragraph_value'),
+                            ], className = 'two_rows'),
+                            html.Div(id = 'third_sentence',
+                                     className = 'status_paragraph_value1'),
+                        ], className = 'three_rows')
+                    ], className = 'sentence_row'),
+                    html.Div([
+                        html.Div(id = 'numeric_value',
+                                 className = 'status_numeric_value'),
+                    ], className = 'status_numeric_value_row')
+                ], className = 'background_image_current_weather_time_column'),
+            ], className = 'background_image_current_weather_time_content_row')
+        ], className = 'background_image_current_weather_time_column'),
+        html.Div([
+            html.Div([
+                html.P('AccuWeather Data', className = 'acc_data_text'),
                 html.Div([
-                    html.Div(id = 'numeric_value',
-                             className = 'status_numeric_value'),
-                ], className = 'status_numeric_value_row')
-            ], className = 'background_image_current_weather_time_column'),
-        ], className = 'background_image_current_weather_time_content_row')
-    ], className = 'background_image_current_weather_time_column'),
+                    html.Div(id = 'accu_temp'),
+                    html.Div(id = 'accu_hum'),
+                ], className = 'accu_temp_hum_row'),
+                html.Hr(className = 'acc_bottom_border'),
+                html.Div([
+                    html.Div(id = 'accu_dew_point'),
+                    html.Div(id = 'accu_atm_pressure'),
+                ], className = 'accu_temp_hum_row'),
+                html.Hr(className = 'acc_bottom_border'),
+                html.Div([
+                    html.Div(id = 'accu_wind_speed'),
+                    html.Div(id = 'accu_wind_direction'),
+                ], className = 'accu_temp_hum_row'),
+            ], className = 'accu_column')
+        ], className = 'accu_weather_card_background_color'),
+    ], className = 'accu_weather_card_background_color_row'),
+    html.Div([
+        html.P('More Details',
+               className = 'more_details'),
+        html.Div(className = 'more_details_bottom_border'),
+    ], className = 'background_color_more_details'),
+    html.Div([
+
+        html.Div([
+            html.Div([
+                html.Div([
+                    html.Div(id = 'air_pressure',
+                             className = 'air_pressure_value'),
+                    html.Div(id = 'air_quality',
+                             className = 'air_quality_value'),
+                ], className = 'atmospheric_pressure_quality_value_column'),
+                html.Div([
+                    html.Div(id = 'sun_rise_status'),
+                    html.Img(src = app.get_asset_url('climate.png'),
+                             className = 'circle_image'),
+                    html.Div(id = 'sun_set_status'),
+                ], className = 'sun_rise_set_status_value'),
+            ], className = 'atmospheric_pressure_quality_value_sun_row'),
+        ], className = 'background_color_more_details_card1'),
+
+        html.Div([
+            html.Div([
+                html.Div([
+                    dcc.Graph(id = 'wind_speed',
+                              animate = False,
+                              config = {'displayModeBar': False},
+                              className = 'wind_speed_graph'),
+                    html.Div(id = 'wind_speed_value',
+                             className = 'wind_speed_numeric_value')
+                ], className = 'wind_speed_numeric_value_column'),
+
+                # html.Div(id = 'wind_direction_value',
+                #          className = 'wind_speed_direction_numeric_value'),
+                dcc.Graph(id = 'wind_direction_graph',
+                          animate = False,
+                          config = {'displayModeBar': False},
+                          className = 'wind_direction_graph'),
+            ], className = 'wind_speed_direction_numeric_value_row')
+        ], className = 'background_color_more_details_card2'),
+
+    ], className = 'content_row'),
 ])
 
 
@@ -236,6 +314,110 @@ def numeric_value_value_callback(n_intervals):
     numeric_value_value_data = numeric_value_value(n_intervals)
 
     return numeric_value_value_data
+
+
+@app.callback(Output('accu_temp', 'children'),
+              [Input('update_value', 'n_intervals')])
+def accu_temp_value_callback(n_intervals):
+    accu_temp_value_data = accu_temp_value(n_intervals)
+
+    return accu_temp_value_data
+
+
+@app.callback(Output('accu_hum', 'children'),
+              [Input('update_value', 'n_intervals')])
+def accu_hum_value_callback(n_intervals):
+    accu_hum_value_data = accu_hum_value(n_intervals)
+
+    return accu_hum_value_data
+
+
+@app.callback(Output('accu_dew_point', 'children'),
+              [Input('update_value', 'n_intervals')])
+def accu_dew_point_value_callback(n_intervals):
+    accu_dew_point_value_data = accu_dew_point_value(n_intervals)
+
+    return accu_dew_point_value_data
+
+
+@app.callback(Output('accu_atm_pressure', 'children'),
+              [Input('update_value', 'n_intervals')])
+def accu_atm_pressure_value_callback(n_intervals):
+    accu_atm_pressure_value_data = accu_atm_pressure_value(n_intervals)
+
+    return accu_atm_pressure_value_data
+
+
+@app.callback(Output('accu_wind_speed', 'children'),
+              [Input('update_value', 'n_intervals')])
+def accu_wind_speed_value_callback(n_intervals):
+    accu_wind_speed_value_data = accu_wind_speed_value(n_intervals)
+
+    return accu_wind_speed_value_data
+
+
+@app.callback(Output('accu_wind_direction', 'children'),
+              [Input('update_value', 'n_intervals')])
+def accu_wind_direction_value_callback(n_intervals):
+    accu_wind_direction_value_data = accu_wind_direction_value(n_intervals)
+
+    return accu_wind_direction_value_data
+
+
+@app.callback(Output('air_pressure', 'children'),
+              [Input('update_value', 'n_intervals')])
+def air_pressure_value_callback(n_intervals):
+    air_pressure_value_data = air_pressure_value(n_intervals)
+
+    return air_pressure_value_data
+
+
+@app.callback(Output('air_quality', 'children'),
+              [Input('update_value', 'n_intervals')])
+def air_quality_value_callback(n_intervals):
+    air_quality_value_data = air_quality_value(n_intervals)
+
+    return air_quality_value_data
+
+
+@app.callback(Output('sun_rise_status', 'children'),
+              [Input('update_value', 'n_intervals')])
+def sun_rise_status_value_callback(n_intervals):
+    sun_rise_status_value_data = sun_rise_status_value(n_intervals)
+
+    return sun_rise_status_value_data
+
+
+@app.callback(Output('sun_set_status', 'children'),
+              [Input('update_value', 'n_intervals')])
+def sun_set_status_value_callback(n_intervals):
+    sun_set_status_value_data = sun_set_status_value(n_intervals)
+
+    return sun_set_status_value_data
+
+
+@app.callback(Output('wind_speed', 'figure'),
+              [Input('update_value', 'n_intervals')])
+def wind_speed_graph_callback(n_intervals):
+    wind_speed_graph_data = wind_speed_graph(n_intervals)
+
+    return wind_speed_graph_data
+
+
+@app.callback(Output('wind_speed_value', 'children'),
+              [Input('update_value', 'n_intervals')])
+def wind_speed_value_value_callback(n_intervals):
+    wind_speed_value_value_data = wind_speed_value_value(n_intervals)
+
+    return wind_speed_value_value_data
+
+
+@app.callback(Output('wind_direction_graph', 'figure'),
+              [Input('update_value', 'n_intervals')])
+def wind_direction_graph_callback(n_intervals):
+    wind_direction_graph_data = wind_direction_graph(n_intervals)
+
+    return wind_direction_graph_data
 
 
 if __name__ == "__main__":
